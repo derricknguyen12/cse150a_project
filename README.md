@@ -28,7 +28,7 @@ Our preprocessing, data exploration, and training can be found in this notebook:
 
 ## Evaluate your model
 
-  To evaluate our model, we trained it on user data by splitting the recommended games into training and testing sets. Our goal was to determine whether the model could successfully recommend games that a user had already marked as recommended. To measure accuracy, we analyzed the top five games suggested by the model for each user and checked whether the user had actually recommended any of them. This allowed us to assess how well the model aligns with user preferences based on past recommendations. We obtained an accuracy score of 0.87
+  To evaluate our model, we trained it on user data by splitting the recommended games into training and testing sets. Our goal was to determine whether the model could successfully recommend games that a user had already marked as recommended. To measure accuracy, we analyzed the top five games suggested by the model for each user and checked whether the user had actually recommended any of them in the testing set. This allowed us to assess how well the model aligns with user preferences based on past recommendations. We obtained an accuracy score of 0.87.
 
 ## Conclusion section: What is the conclusion of your 1st model? What can be done to possibly improve it?
 

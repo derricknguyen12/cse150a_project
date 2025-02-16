@@ -32,5 +32,5 @@ Our preprocessing, data exploration, and training can be found in this notebook:
 
 ## Conclusion section: What is the conclusion of your 1st model? What can be done to possibly improve it?
 
-  With an accuracy of 87%, we can conclude that our model is mostly predicting user predictions correctly when loking at hours of game play by the user. To improve our model, we could use feature engineering to extract more information about the user to make predictions as currently we are basing it off of the number of hours they play games. We can also work to optimize our model, such as optimizing the number of hidden states that the model is using.
+  With an accuracy of 87%, we can conclude that our model is mostly predicting user predictions correctly when looking at hours of game play by the user, price, and game genre. Right now, we are using genre as a categorical variable without taking into account the user-specific aspects of genre as each user may have genres they prefer and play more frequently. To improve our model, we could use feature engineering to extract more information about the user to make predictions such as user-specific genre preferences that represent the genres each user has interacted with or played the most. We can also work to optimize our model, such as optimizing the number of hidden states that the model is using.
 

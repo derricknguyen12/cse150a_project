@@ -1,4 +1,4 @@
-# cse150a_project
+# CSE150A_Project: Game Recommendation System
 ## Explain what your AI agent does in terms of PEAS. What is the "world" like?
 
   Our AI agent is a game recommendation agent, that aims to recommmend a game to the user based on their preferences and recommendations of other games they have played in the past.

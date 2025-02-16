@@ -19,8 +19,17 @@
 
 ## Describe how your agent is set up and where it fits in probabilistic modeling
 
+ To code this agent, we are using a hidden markov model. We chose the observations to be hours played (categorized: low, medium, high), genres (one-hot encoded to determine if it is one of the top genres), price, and past recommendations(games that the user has already recommended). With these observations, the model predicts the current state, and recommends games to match it. The model fits into proabilisitic modeling because it represents the user's gaming preferences as the hidden states, and each state has an observable feature. It then uses the transition between states to update the recommendations to so they are personalized to the user.
+
 ## Train your first model
+
+Our preprocessing, data exploration, and training can be found in this notebook: (ADD NOTEBOOK LINK)
+  
 
 ## Evaluate your model
 
+To evaluate our model, we trained the model on user data, by splitting the users recommended games into train and test splits, and testing to see if the model could recommend the games that the user has already detremined as qould recommend, so see if they could get the recommendations right. Our accuracy for our model is (ADD ACCURACY)
+
 ## Conclusion section: What is the conclusion of your 1st model? What can be done to possibly improve it?
+
+(ADD CONCLUSION FOR AGENT)

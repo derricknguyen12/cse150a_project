@@ -28,7 +28,7 @@ Our preprocessing, data exploration, and training can be found in this notebook:
 
 ## Evaluate your model
 
-To evaluate our model, we trained the model on user data, by splitting the users recommended games into train and test splits, and testing to see if the model could recommend the games that the user has already detremined as qould recommend, so see if they could get the recommendations right. Our accuracy for our model is (ADD ACCURACY)
+To evaluate our model, we trained the model on user data, by splitting the users recommended games into train and test splits, and testing to see if the model could recommend the games that the user has already determined as could recommend, so see if they could get the recommendations right. 
 
 ## Conclusion section: What is the conclusion of your 1st model? What can be done to possibly improve it?
 

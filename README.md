@@ -24,11 +24,13 @@
 ## Train your first model
 
 Our preprocessing, data exploration, and training can be found in this notebook: (ADD NOTEBOOK LINK)
+For our preprocessing, we dropped rows that contained NaN values as those rows do not contribute significantly to our model and can be removed. We also dropped irrelevant columns that we would not be using in our model such as 'Support email' and 'Support Url'. Since 'Release date' was initally of type string, we converted it to datetime for easier manipulation. Before training our Hidden Markov Model, we label encoded the 'Genre' column and binned 'Price' into 4 bins: (0 - 10), (10 - 30), (30 - 60), and (60+) and labeled it with [0, 1, 2, 3], corresponding to how expensive the game is. 
   
 
 ## Evaluate your model
 
-  To evaluate our model, we trained it on user data by splitting the recommended games into training and testing sets. Our goal was to determine whether the model could successfully recommend games that a user had already marked as recommended. To measure accuracy, we analyzed the top five games suggested by the model for each user and checked whether the user had actually recommended any of them in the testing set. This allowed us to assess how well the model aligns with user preferences based on past recommendations. We obtained an accuracy score of 0.87.
+  To evaluate our model, we trained it on user data by splitting the recommended games into training and testing sets. Our goal was to determine whether the model could successfully recommend games that a user had already marked as recommended. To measure accuracy, we analyzed the top five games suggested by the model for each user and checked whether the user had actually recommended any of them in the testing set. This allowed us to assess how well the model aligns with user preferences based on past recommendations. We obtained an accuracy score of 0.87. 
+  To test whether our model was overfitting or underfitting, we created a fitting graph using models with 4 different n_components: [2, 3, 4, 5]. From our fitting graph, we found that our model was overfitting as the training accuracy was higher than the testing accuracy. 
 
 ## Conclusion section: What is the conclusion of your 1st model? What can be done to possibly improve it?
 

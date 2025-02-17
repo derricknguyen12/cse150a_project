@@ -23,7 +23,7 @@
 
 ## Train your first model
 
-Our preprocessing, data exploration, and training can be found in this notebook: (ADD NOTEBOOK LINK)
+Our preprocessing, data exploration, and training can be found in this notebook: [View the Notebook](notebook_name.ipynb)
 
 For our preprocessing, we dropped rows that contained NaN values as those rows do not contribute significantly to our model and can be removed. We also dropped irrelevant columns that we would not be using in our model such as 'Support email' and 'Support Url'. Since 'Release date' was initally of type string, we converted it to datetime for easier manipulation. Before training our Hidden Markov Model, we label encoded the 'Genre' column and binned 'Price' into 4 bins: (0 - 10), (10 - 30), (30 - 60), and (60+) and labeled it with [0, 1, 2, 3], corresponding to how expensive the game is. 
   

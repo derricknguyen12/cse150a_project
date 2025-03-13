@@ -89,19 +89,11 @@ The model iterates over these steps until convergence.
 
 ## Train your first model
 
-Our preprocessing, data exploration, and training can be found in this notebook: https://github.com/derricknguyen12/cse150a_project/blob/Milestone-2/proj.ipynb
-
-For our preprocessing, we dropped rows that contained NaN values as those rows do not contribute significantly to our model and can be removed. We also dropped irrelevant columns that we would not be using in our model such as 'Support email' and 'Support Url'. Since 'Release date' was initally of type string, we converted it to datetime for easier manipulation. Before training our Hidden Markov Model, we label encoded the 'Genre' column. We also binned 'Price' into 4 bins: (0 - 10), (10 - 30), (30 - 60), and (60+) and labeled it with [0, 1, 2, 3], corresponding to how expensive the game is. Additionally, we binned 'hours' into 4 bins as well based on it's quantile: (min - Q1), (Q1 - Q2), (Q2 - Q3), and (Q3 - max) and labeled it with [0, 1, 2, 3], corresponding to different levels of hours played.
-
-## Evaluate your model
-
-  To evaluate our model, we trained it on user data by splitting the recommended games into training and testing sets. Our goal was to determine whether the model could successfully recommend games that a user had already marked as recommended. To measure accuracy, we analyzed the top five games suggested by the model for each user and checked whether the user had actually recommended any of them in the testing set. This allowed us to assess how well the model aligns with user preferences based on past recommendations. We obtained an accuracy score of 0.88. 
   
   To test whether our model was overfitting or underfitting, we created a fitting graph using models with 4 different n_components: [2, 3, 4, 5]. From our fitting graph, we found that our model was overfitting as the training accuracy was higher than the testing accuracy. 
 
 ## Conclusion section: What is the conclusion of your 1st model? What can be done to possibly improve it?
 
-  With an accuracy of 88.5%, we can conclude that our model is mostly predicting user predictions correctly when looking at hours of game play by the user, price, and game genre. Right now, we are using genre as a categorical variable without taking into account the user-specific aspects of genre as each user may have genres they prefer and play more frequently. To improve our model, we could use feature engineering to extract more information about the user to make predictions such as user-specific genre preferences that represent the genres each user has interacted with or played the most. We can also work to optimize our model, such as optimizing the number of hidden states that the model is using.
 
 ## Citations:
 

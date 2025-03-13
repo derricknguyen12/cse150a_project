@@ -1,3 +1,45 @@
+# CSE150A_Project: Game Recommendation System
+### By: Derrick Nguyen, Amelia Lei, Jahnavi Naik
+
+## PEAS/Agent Analysis:
+
+Describe your agent in terms of PEAS and give a background of your task at hand.
+
+Our AI agent is a game recommendation agent, that aims to recommmend a game to the user based on their preferences and recommendations of other games they have played in the past.
+  In terms of PEAS, we have:
+  
+  Performance Measure: the feedback that the user gives from the games that have been recommended to them, and how satisfied they are with it. 
+  
+  Environment: the user profiles and their preferences, along with all of the game data. 
+  
+  Actuators: the games that the agent recommends to the user based on the preferences. 
+  
+  Sensors: the information about the game and users that the agent uses to generate personalized recommendations. This includes the game catalog such as genre and ratings and the user preferences such as previous games they’ve enjoyed, favorite genres, or their budget.
+
+
+## Agent Setup, Data Preprocessing, Training setup
+
+Give an exploration of your dataset, and highlight which variables are important. Give a brief overview of each variable and its role in your agent/model. (Draw a picture!!)
+Describe in detail how your variables interact with each other, and if your model fits a particular structure, explain why you chose that structure to model your agent. If it does not, further elaborate on why you chose that model based on the variables.
+Describe your process for calculating parameters in your model. That is, if you wish to find the CPTs, provide formulas as to how you computed them. If you used algorithms in class, just mention them.
+Important: if you used a library like pgmpy, etc., be sure to explain what it does. Then, cite your source (library homepage link or documentation is sufficient) at the bottom of your README.md file.
+If you use a particular algorithm/model/structure not covered in this class as your core structure (i.e. GaussianHMM, etc.) you must carefully explain the formulation behind this structure. How does it differ from its discrete analog (if it has one?) How do you perform inference on it?
+If you use a particular algorithm/model/structure not covered in this class as a non-core structure (i.e. RandomHillCimb to create BN dependencies) you may briefly explain what the function does. Remember to provide a source.
+
+Be sure to link to a clean, documented portion of code in your notebook or provide a code snippet in the README.
+
+## Conclusion/Results (20pts)
+
+Describe in detail your results, including any helpful visualizations like heatmaps, confusion matrices, etc. (if applicable). Please provide numerical results (unless your model's performance metrics do not include numbers).
+Be sure to interpret your results! If you obtain a poor performance, compare it to some baseline easy task (i.e. random guessing, etc.) so you can have an estimate as to where your model performance is at.
+Propose various points of improvement for your model, and be thorough! Do not just say "we could use more data", or "I'll be sure to use reinforcement learning for the next milestone so we can better model our objective." Carefully work through your data preprocessing, your training steps, and point out any simplifications that may have impacted model performance, or perhaps any potential errors or biases in the dataset. You are not required to implement these points of improvement unless it is clear that your original model is significantly lacking in detail or effort.
+
+
+
+
+
+
+
 # Update
 
 

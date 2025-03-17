@@ -348,7 +348,7 @@ The model iterates over these steps during training, learning the probability di
 
 A more detailed version of our preprocessing, data exploration, and training can be found in this notebook (Agent #2): [View the Notebook](proj.ipynb)
 
-Here is a snippet of what we did:
+Here is a snippet of what we did (Refer to the linked notebook for the recommendation function):
 ```
 def preprocess_data(df):
     # calculate sentiment

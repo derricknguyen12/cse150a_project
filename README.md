@@ -459,5 +459,7 @@ Points of Improvement:
 Categorical Naive Bayes Reference: [https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html ](https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html)
 
 We used ChatGPT to help us better understand Categorical Naive Bayes and it's implementation with our dataset.
+"How does categoricalNB compare to normal naiveBayes"
+https://chatgpt.com/share/67d7c6ba-a308-800c-b485-af92faceb38b
 
 

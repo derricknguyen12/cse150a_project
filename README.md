@@ -352,27 +352,62 @@ The model iterates over these steps during training, learning the parameters μ 
 
 ### Be sure to link to a clean, documented portion of code in your notebook or provide a code snippet in the README.
 
-Our preprocessing, data exploration, and training can be found in this notebook (Agent #2): [View the Notebook](proj.ipynb)
+A more detailed version of our preprocessing, data exploration, and training can be found in this notebook (Agent #2): [View the Notebook](proj.ipynb)
+
+Here is a snippet of what we did:
 ```
+def preprocess_data(df):
+    # calculate sentiment
+    df['review_ratio'] = df['Positive'] / (df['Negative'] + 1)  
+
+    # get all game genres
+    genres = []
+    for genre_list in df['Genres']:
+        genres.extend(genre_list.split(','))
+    unique_genres = list(set(genres))
+    
+    #encode genres
+    for genre in unique_genres:
+        df[f'genre_{genre}'] = df['Genres'].apply(lambda x: 1 if genre in x else 0)
+    
+    # bin prices
+    df['price_tier'] = pd.cut(df['Price'], 
+                             bins=[-0.01, 0.01, 10, 20, 40, 100], 
+                             labels=['Free', 'Budget', 'Mid', 'Premium', 'Deluxe'])
+    
+    # bin playtimes hours
+    df['playtime_tier'] = pd.cut(df['hours'], 
+                               bins=[-0.01, 10, 50, 100, 500, 5000], 
+                               labels=['Very Low', 'Low', 'Medium', 'High', 'Very High'])
+
+    
+    return df
+
 processed_df = preprocess_data(merged_df)
 
 # Model Features
 features = ['review_ratio'] + \
            [col for col in processed_df.columns if col.startswith('genre_')]
 
+# encode price and playtime
 for col in ['price_tier', 'playtime_tier']:
     le = LabelEncoder()
     processed_df[col] = le.fit_transform(processed_df[col])
     features.append(col)
 
+
 X = processed_df[features]
 y = processed_df['is_recommended']
 
+# split dataste into training and testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Naive Bayes model
 nb_model = GaussianNB()
 nb_model.fit(X_train, y_train)
+y_pred = nb_model.predict(X_test)
+
+
 ```
 
 

@@ -47,9 +47,9 @@ Here is how each of the features interact with the target variable (is_recommend
 
 We chose a Naive Bayes model for this structure because even though these interactions exist, Naive Bayes assumes feature independence. This means that the model is calculating:
 
-P(is_recommended∣X) = P(genre∣is_recommended)P(price_tier∣is_recommended)P(playtime_tier∣is_recommended)P(review_ratio∣is_recommended)P(is_recommended)  
+P(is_recommended | X) = P(genre | is_recommended) P(price_tier | is_recommended) P(playtime_tier | is_recommended) P(review_tier | is_recommended) P(is_recommended)
 
-Therefore, even if price_tier and review_ratio influence each other, the model treats them separately. This simplifies the model and makes it more efficient. However, one drawback is that it might miss more complex dependencies such as expensive games having lower review scores. 
+Therefore, even if price_tier and review_tier influence each other, the model treats them separately. This simplifies the model and makes it more efficient. However, one drawback is that it might miss more complex dependencies such as expensive games having lower review scores. 
 
 
 ### Describe your process for calculating parameters in your model. That is, if you wish to find the CPTs, provide formulas as to how you computed them. If you used algorithms in class, just mention them.
@@ -294,13 +294,9 @@ $P(X_i = x | Y = y) = count(X_i = x, Y = y) / count(Y = y)$
 
 To calculate P(is_recommended) which represents the probability that a game was recommended (True) or not (False), we used the following formulas:
 
-$$
-P(\text{is\_recommended} = \text{True}) = \frac{\text{Number of Recommended Games}}{\text{Total Number of Games}}
-$$
+P(is_recommended = True) = Number of Recommended Games / Total Number of Games
 
-$$
-P(\text{is\_recommended} = \text{False}) = \frac{\text{Number of Not Recommended Games}}{\text{Total Number of Games}}
-$$
+P(is_recommended = False) = Number of Not Recommended Games / Total Number of Games
 
 <div>
 <table border="1" class="dataframe">
@@ -334,7 +330,7 @@ After calculating these parameters, we used Bayes' Theorem to determine the post
  ### What is Categorical Naive Bayes?
 Categorical Naive Bayes differ from regular naive bayes in the way that it handles the model's feature distributions. While other forms of naive bayes assumes features follow specific probability distributions such as the multinomial distribution for text data or the Gaussian distribution for continuous data, categorical naive bayes is specifically designed for discrete categorical features. This works well with our data because we binned all of our numerical variables, making them categorical variables. We also have categorical features such as genre which is appropriate for this model. Categorical Naive Bayes estimates the conditional probability of each feature given a class using frequency counts and applies Laplace smoothing to handle unseen category values. 
 
-Categorical Naive Bayes Reference: [https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html ](https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html)
+Categorical Naive Bayes Reference: [https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html ](https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html)
 
  ### How do its training algorithms work?
  
@@ -414,11 +410,11 @@ nb_model.fit(X_train, y_train)
 
 ### How did you train your Categorical Naive Bayes?
  
- We trained our Categorical Naive Bayes by analyzing the dataset and turning them into meaningful states. For our training we:
+We trained our Categorical Naive Bayes model by analyzing the dataset and converting the continuous and numerical variables into discrete categories to be used in our model. For our training we:
  
  Preprocessed the Data:
  
-The dataset was processed by first engineering new features, such as review ratio (calculated as the ratio of positive to negative reviews) and categorical encoding of price_tiers, playtime tiers, and review_tiers using binning. Additionally, genres were one-hot encoded to represent different game categories.
+The dataset was processed by first engineering new features, such as review ratio (calculated as the ratio of positive to negative reviews) and binning of of price_tiers, playtime tiers, and review_tiers. Additionally, genres were encoded to represent different game categories.
  
  Trained the Categorical Naive Bayes:
  
@@ -444,7 +440,7 @@ The above confusion matrix tells us the counts for how many true positives, fals
 ![fitting_graph](https://github.com/user-attachments/assets/e97c55c3-8d2e-4d0e-95fd-6e3fee553787)
 
 
-We also created a fitting graph for our model to test whether it was overfititng or underfitting to our data. From our fitting graph, we can see that the testing and training accuracies are very close to each other no amtter the number of training samples. Since the accuracies are almost identical, this means that our model does not have signs of overfitting or underfitting and generalizes well to our data. These results make sense given the nature of a naive bayes model. Since the model assumes conditional independance for all features given the class label, this simplifies the model and reduces the risk of overfitting as it doesn't learn any complex relationships. The probabalistic process of this mdoel also makes it more robust to noise as it's learning the likelihood of the data instead of specific patterns. 
+We also created a fitting graph for our model to test whether it was overfititng or underfitting to our data. From our fitting graph, we can see that the testing and training accuracies are very close to each other no matter the number of training samples. Since the accuracies are almost identical, this means that our model does not have signs of overfitting or underfitting and generalizes well to our data. These results make sense given the nature of a naive bayes model. Since the model assumes conditional independance for all features given the class label, this simplifies the model and reduces the risk of overfitting as it doesn't learn any complex relationships. The probabalistic process of this model also makes it more robust to noise as it's learning the likelihood of the data instead of specific patterns. 
 
 ### Be sure to interpret your results! If you obtain a poor performance, compare it to some baseline easy task (i.e. random guessing, etc.) so you can have an estimate as to where your model performance is at. Propose various points of improvement for your model, and be thorough! Do not just say "we could use more data", or "I'll be sure to use reinforcement learning for the next milestone so we can better model our objective." Carefully work through your data preprocessing, your training steps, and point out any simplifications that may have impacted model performance, or perhaps any potential errors or biases in the dataset. You are not required to implement these points of improvement unless it is clear that your original model is significantly lacking in detail or effort.
 
@@ -454,10 +450,10 @@ Our Categorical Naive Bayes model achieved an accuracy of 0.8182, meaning it cor
 
 Points of Improvement:
 
-- Feature selection: We could perform thorough feature selection in order to pick the features that would help recommend games the best, as we currently just chose the ones we believed would be the most impactful.
-- Feature engineering: We could create new features that show the interaction of features, such as the ratio of playtime to price to see if the game is a good deal.
-- Data Preprocessing: Currently in the data preprocessing, we drop all rows that contain NaN values as we had a lot of data making it feasible. In the future, instead of just dropping them all, we can think about ways to impute values that are missing based on similar games.
-- Handling Outliers: Gaussian Naive Bayes assumes normally distributed features, but real-world data often contains skewness and outliers. Applying log transformations or scaling methods like standardization could improve the distribution of features and improve performance.
+- Feature selection: We could imrpove our feature selection process by using L1 regularization in order to pick the features that would help recommend games the best as we currently just chose the ones we believed would be the most impactful. This would force the coefficients of less important features to shrink to 0 and remove them from the model. Then, we would be left with the most significant features that would improve our model performance. 
+- Feature engineering: We could create new interaction features to capture relationships between different features such as the ratio of playtime to price to see if the game is a good deal. 
+- Data Preprocessing: Currently in the data preprocessing, we drop all rows that contain NaN values which works due to the large quantity of the data we have. However, in the future we could consider imputing missing values instead of dropping them, especially for important features. We could use the mode or other techniques like nearest neighbor imputation to fill missing values based on the closest games.
+- Handling Outliers: Although Categorical Naive Bayes does not explicitly assume normal distribution like Gaussian Naive Bayes, extreme outliers in categorical features may still have impacted our model performance. We could look at the frequency distribution of categorical values in our EDA and identify rare categories that might skew results. If outliers are found, we could merge them into broader categories or apply techniques like smoothing to prevent overfitting to rare classes.
 
 
 ## Citations:

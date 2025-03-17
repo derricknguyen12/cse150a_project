@@ -18,7 +18,7 @@ Our AI agent is a game recommendation agent that aims to recommend a game to the
 ### Give an exploration of your dataset, and highlight which variables are important. Give a brief overview of each variable and its role in your agent/model.
 
 For our project, we used 2 datasets. One includes many steam games along with different attributes that describe them such as price, genre, release date, required age, about the game, etc. We also have a dataframe that has user information, which tells us games that different users have played, if they recommend them, and their reviews. After pre-processing these dataframes, we found that the important variables we would use are review ratio, genres, price tier, and playtime tier. These are variables that we engineered using the available features. 
-- review_ratio: Review ratio is a continuous variable that represents the proportion of positive reviews a game has received. It helps us determine the overall sentiment of the game. 
+- review_tier: Review tier represents the proportion of positive reviews a game has received classified into different ranges ('Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive'). It helps us determine the overall sentiment of the game. 
 -  genres: Each game is encoded into multiple genre categories (e.g., Action, RPG, Strategy). This allows the model to identify which genres a user frequently engages with and recommend games within those preferred genres. We used binary encoding, where each genre is represented as a separate feature (genre_action, genre_rpg)
 -  price_tier: Games can be classified into different prices ranges ('Free', 'Budget', 'Mid', 'Premium', 'Deluxe'). This allows our model to identify whether users prefer premium or affordable games. This feature helps get more accurate recommendations based on affordability preferences.
 -  playtime_tier: Playtime tier categorizes the total hours spent on a game into different ranges ('Very Low', 'Low', 'Medium', 'High', 'Very High'). Users who play long-playtime games may prefer similar recommendations, whereas casual players may prefer shorter games. This helps our model capture general player behavior trends.
@@ -29,16 +29,16 @@ For our project, we used 2 datasets. One includes many steam games along with di
 ### Describe in detail how your variables interact with each other, and if your model fits a particular structure, explain why you chose that structure to model your agent. If it does not, further elaborate on why you chose that model based on the variables.
 
 Here is how each of the features interact with the target variable (is_recommended) and with each other:
-- review_ratio:
-  - review_ratio - is_recommended: Games with a higher review ratio are more likely to be recommended 
-  - review_ratio - playtime_tier: If a game has higher playtime, it is more likely to have positive reviews because players are enjoying the game.
+- review_tier:
+  - review_tier - is_recommended: Games with a higher review ratio are more likely to be recommended 
+  - review_tier - playtime_tier: If a game has higher playtime, it is more likely to have positive reviews because players are enjoying the game.
 - price_tier: 
   - price_tier - is_recommended: Cheaper games are more likely to be recommended because they are more accessible 
-  - price_tier - review_ratio: players tend to have higher expectations for more expensive games to make sure it’s worth their money which can result in lower review scores for more expensive games 
+  - price_tier - review_tier: players tend to have higher expectations for more expensive games to make sure it’s worth their money which can result in lower review scores for more expensive games 
 - playtime_tier:
   - playtime_tier - is_recommended: games with a higher playtime are more likely to be recommended because they’re more engaging 
   - playtime_tier - genre: certain games tend to have higher playtimes such as strategy games and MMOs
-  - playtime_tier - review_ratio: games with higher playtimes tend to have more engaged players which leads to higher reviews
+  - playtime_tier - review_tier: games with higher playtimes tend to have more engaged players which leads to higher reviews
 - genre:
   - genre - is_recommneded: Certain genres (e.g. action and RPG) tend to have higher recommendation rates regardless of other features 
   - genre - price: genres like AAA action-adventure with longer storylines and better graphics are often more expensive compared to casual indie games 
@@ -53,7 +53,7 @@ Therefore, even if price_tier and review_ratio influence each other, the model t
 
 ### Describe your process for calculating parameters in your model. That is, if you wish to find the CPTs, provide formulas as to how you computed them. If you used algorithms in class, just mention them.
 
-For discrete variables such as price tier, playtime tier, and genre, we used Maximum Likelihood Estimation (MLE) to compute the probability of each category occurring given the recommendation status. This was done by counting the occurrences of each feature value within each class and dividing it by the total number of instances in that class. 
+Since we made our variables (price_tier, playtime_tier, review_tier, genre) discrete variables by binning them, we used Maximum Likelihood Estimation (MLE) to compute the probability of each category occurring given the recommendation status. This was done by counting the occurrences of each feature value within each class and dividing it by the total number of instances in that class. 
 <div>
 <table border="1" class="dataframe">
   <thead>
@@ -135,6 +135,47 @@ For discrete variables such as price tier, playtime tier, and genre, we used Max
       <td>0.091120</td>
       <td>0.015954</td>
       <td>0.443988</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>review_tier</th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+    <tr>
+      <th>is_recommended</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>False</th>
+      <td>0.018682</td>
+      <td>0.024609</td>
+      <td>0.052432</td>
+      <td>0.001968</td>
+      <td>0.902308</td>
+    </tr>
+    <tr>
+      <th>True</th>
+      <td>0.001728</td>
+      <td>0.003478</td>
+      <td>0.011047</td>
+      <td>0.000429</td>
+      <td>0.983318</td>
     </tr>
   </tbody>
 </table>
@@ -250,45 +291,6 @@ $P(X_i = x | Y = y) = count(X_i = x, Y = y) / count(Y = y)$
 <p>2 rows × 28 columns</p>
 </div>
 
-For continuous features like the review ratio, we assumed a Gaussian distribution and calculated the parameters (mean and variance) for each class. This involved computing the mean $u_y,i$ and variance $σ²_y,i$ of the feature within each class using the following formulas:
-
-$μ_y,i = (1 / N_y) * Σ (x_j,i)$
-
-$σ²_y,i = (1 / N_y) * Σ (x_j,i - μ_y,i)²$
-
-where $N_y$  is the number of instances belonging to class Y = y and $x_j,i$ represents individual feature values. The probability density function (PDF) for a given value $x_i$ was then computed using the Gaussian formula:
-
-$P(x_i | y) = (1 / sqrt(2πσ²_y,i)) * exp(- (x_i - μ_y,i)² / 2σ²_y,i)$
-
-<div>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>mean</th>
-      <th>std</th>
-    </tr>
-    <tr>
-      <th>is_recommended</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>False</th>
-      <td>6.520797</td>
-      <td>7.528456</td>
-    </tr>
-    <tr>
-      <th>True</th>
-      <td>13.300347</td>
-      <td>13.887151</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
 To calculate P(is_recommended) which represents the probability that a game was recommended (True) or not (False), we used the following formulas:
 
 $$
@@ -328,25 +330,21 @@ After calculating these parameters, we used Bayes' Theorem to determine the post
 
 ### If you use a particular algorithm/model/structure not covered in this class as a non-core structure (i.e. RandomHillCimb to create BN dependencies) you may briefly explain what the function does. Remember to provide a source.
 
- ### What is Gaussian Naive Bayes?
-Gaussian Naive Bayes differ from regular naive bayes in the way that it handles the model's feature distributions. This is because Gaussian Naive Bayes handles continuous features by assuming they follow a Normal distribution. Instead of using feature frequencies, it computes the probability of each feature given a class using the Gaussian probability density function (PDF), which depends on the mean and variance of the feature per class. The inference process in both models follows Bayes' Theorem, but in GNB, P(Xi|Y) is derived from the Gaussian PDF rather than categorical probabilities. 
-  
-$P(x_i | y) = \frac{1}{\sqrt{2\pi\sigma^2_{y,i}}} \exp\left(-\frac{(x_i - \mu_{y,i})^2}{2\sigma^2_{y,i}}\right)$
-  
-GaussianNB is well-suited for numerical data like game prices or user ratings as well as our review ratio variable (a continuous variable), whereas regular Naïve Bayes is more effective for text-based applications. We implement Gaussian Naive Bayes using the model function from the scikit-learn library, where the .fit() function estimates the mean and variance for each feature per class, and .predict() computes posteriors using the Gaussian PDF to classify new data points.
+ ### What is Categorical Naive Bayes?
+Categorical Naive Bayes differ from regular naive bayes in the way that it handles the model's feature distributions. While other forms of naive bayes assumes features follow specific probability distributions such as the multinomial distribution for text data or the Gaussian distribution for continuous data, categorical naive bayes is specifically designed for discrete categorical features. This works well with our data because we binned all of our numerical variables, making them categorical variables. We also have categorical features such as genre which is appropriate for this model. Categorical Naive Bayes estimates the conditional probability of each feature given a class using frequency counts and applies Laplace smoothing to handle unseen category values. 
 
-Gaussian Naive Bayes Reference: https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html 
+Categorical Naive Bayes Reference: [https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html ](https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html)
 
  ### How do its training algorithms work?
  
-Training a Gaussian Naive Bayes classifier involves the following steps:
+Training a Categorical Naive Bayes classifier involves the following steps:
 
  - Calculate Class Priors: Compute the probability of each class (Recommended vs. Not Recommended) based on their frequency in the training data.
- - Estimate Gaussian Parameters: For each numerical feature, compute the mean (μ) and variance (σ²) separately for each class. This assumes that the feature values within each class are normally distributed.
- - Apply Bayes' Theorem: When making predictions, the model uses the probability density function (PDF) of a Gaussian distribution to calculate the likelihood of a feature belonging to a particular class
+ - Estimate Conditional Probabilities: For each categorical feature, the model calculates the probability of each category occurring within each class. These probabilities are estimated using frequency counts and are smoothed using Laplace smoothing to handle unseen category values.
+ - Apply Bayes' Theorem: When making predictions, the model multiplies the prior probability of the class by the conditional probabilities of the observed feature values given that class.
  - Compute Posterior Probability: The posterior probability for each class is computed using Bayes’ Theorem, and the class with the highest probability is chosen as the prediction.
  
-The model iterates over these steps during training, learning the parameters μ and σ² for each feature-class combination, and then uses these parameters to classify new data points.
+The model iterates over these steps during training, learning the probability distributions for each feature class combination and using them to classify new data points.
 
 ## Train Your Model
 
@@ -359,6 +357,11 @@ Here is a snippet of what we did:
 def preprocess_data(df):
     # calculate sentiment
     df['review_ratio'] = df['Positive'] / (df['Negative'] + 1)  
+
+    # Bin review_ratio 
+    df['review_tier'] = pd.cut(df['review_ratio'], 
+                               bins=[-np.inf, 0.2, 0.5, 0.8, 1.2, np.inf], 
+                               labels=['Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive'])
 
     # get all game genres
     genres = []
@@ -383,50 +386,46 @@ def preprocess_data(df):
     
     return df
 
+# Preprocess Data
 processed_df = preprocess_data(merged_df)
 
+encoders = {}  
+for col in ['review_tier', 'price_tier', 'playtime_tier']:
+    encoders[col] = LabelEncoder()  
+    processed_df[col] = encoders[col].fit_transform(processed_df[col])
+
 # Model Features
-features = ['review_ratio'] + \
-           [col for col in processed_df.columns if col.startswith('genre_')]
-
-# encode price and playtime
-for col in ['price_tier', 'playtime_tier']:
-    le = LabelEncoder()
-    processed_df[col] = le.fit_transform(processed_df[col])
-    features.append(col)
-
+features = ['review_tier', 'price_tier', 'playtime_tier'] + \
+           [col for col in processed_df.columns if col.startswith('genre_')] 
 
 X = processed_df[features]
 y = processed_df['is_recommended']
 
-# split dataste into training and testing
+# Split dataset into training and testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Naive Bayes model
-nb_model = GaussianNB()
+# Train Naive Bayes Model
+nb_model = CategoricalNB()
 nb_model.fit(X_train, y_train)
-y_pred = nb_model.predict(X_test)
-
 
 ```
 
 
-### How did you train your Gaussian Naive Bayes?
+### How did you train your Categorical Naive Bayes?
  
- We trained our Gaussian Naive Bayes by analyzing the dataset and turning them into meaningful states. For our training we:
+ We trained our Categorical Naive Bayes by analyzing the dataset and turning them into meaningful states. For our training we:
  
  Preprocessed the Data:
  
-The dataset was processed by engineering new features, such as review ratio (calculated as the ratio of positive to negative reviews) and categorical encoding of price and playtime tiers using binning. Additionally, genres were one-hot encoded to represent different game categories.
+The dataset was processed by first engineering new features, such as review ratio (calculated as the ratio of positive to negative reviews) and categorical encoding of price_tiers, playtime tiers, and review_tiers using binning. Additionally, genres were one-hot encoded to represent different game categories.
  
- Trained the Gaussian Naive Bayes:
+ Trained the Categorical Naive Bayes:
  
-We selected relevant features, including review ratio, genre encodings, price tier, and playtime tier, and applied label encoding to categorical variables. The dataset was split into training (80%) and testing (20%) sets. We then trained a Gaussian Naive Bayes (GNB) model, which assumes that continuous variables follow a Gaussian distribution. Since GNB does not 
-support categorical variables, our categorical features (price tier, playtime tier, and genre encodings) were label-encoded and treated as numerical inputs.  The model was fit using scikit-learn’s GaussianNB implementation.
+We selected relevant features, including review tier, genre encodings, price tier, and playtime tier. Since Categorical Naïve Bayes (CNB) is designed for discrete categorical data, we label encoded price tier, playtime tier, and review tier as they were originally stored at strings. The binary genre encodings was kept as is. After, the dataset was split into training (80%) and testing (20%) sets. We then trained a Categorical Naïve Bayes model using scikit-learn’s CategoricalNB implementation which estimates probabilities based on observed categorical frequencies. 
  
  Evaluating Model Performance:
  
-We evaluated the model using accuracy. Predictions were generated on the test set after being trained on the training set. Accuracy was calculated using accuracy_score(y_test, y_pred), representing the proportion of correctly classified instances. We also plotted a confusion matrix to analyze classification performance by displaying the number of true positives (correctly recommended games), true negatives (correctly not recommended games), false positives (incorrectly recommended games), and false negatives (incorrectly not recommended games). Additionally, we implemented a recommendation function that inferred user preferences from their history and used the trained GNB model to predict recommendations for unplayed games. Using these inferred preferences, we generated recommendations by identifying unplayed games and prediciting their likelihood of being recommended. These recommendations were ranked based on the predicted probability of recommendation.
+We evaluated the model using accuracy. Predictions were generated on the test set after being trained on the training set. Accuracy was calculated using accuracy_score(y_test, y_pred), representing the proportion of correctly classified instances. We also plotted a confusion matrix to analyze classification performance by displaying the number of true positives (correctly recommended games), true negatives (correctly not recommended games), false positives (incorrectly recommended games), and false negatives (incorrectly not recommended games). Additionally, we implemented a recommendation function that inferred user preferences from their history and used the trained CNB model to predict recommendations for unplayed games. Using these inferred preferences, we generated recommendations by identifying unplayed games and prediciting their likelihood of being recommended. These recommendations were ranked based on the predicted probability of recommendation.
 
 
 ## Conclusion/Results
@@ -434,21 +433,21 @@ We evaluated the model using accuracy. Predictions were generated on the test se
 ### Describe in detail your results, including any helpful visualizations like heatmaps, confusion matrices, etc. (if applicable). Please provide numerical results (unless your model's performance metrics do not include numbers).
 ![confusion_matrix](https://github.com/user-attachments/assets/d8a1100c-8d30-4f3c-979f-f59b67accb7d)
 
-To test the accuracy of our model, we split the data into X, which contained all of our features, and y, which contained the is_recommended column. We then use the train test split to split it into training and testing data. We then used the accuracy_score function from the sklearn metrics library to get our accuracy. This works because our is_recommended column tells us games that the user has previously played and either recommends or not, so we test the model to see if it can correctly guess these past games as a game the user would play or not. Our model scores an accuracy of 78.75%. 
+To test the accuracy of our model, we split the data into X, which contained all of our features, and y, which contained the is_recommended column. We then use the train test split to split it into training and testing data. We then used the accuracy_score function from the sklearn metrics library to get our accuracy. This works because our is_recommended column tells us games that the user has previously played and either recommends or not, so we test the model to see if it can correctly guess these past games as a game the user would play or not. Our model scores an accuracy of 81.82%. 
 
-The above confusion matrix tells us the counts for how many true positives, false positives, true negatives, and false negatives our model predicted. The high number of false positives (182,479) suggests that the model is biased towards recommending games. This might be because of the assumption of independence among features. Moreover, the number of false negatives (55,631) suggests that some good recommendations were missed. However, the dominant true positive count (857,318) shows that the model is still effective at making correct recommendations most of the time. According to the confusion matrix, our model has a precision rate of 82.5%, and a recall of 94%. This shows that our model is good at recommending games, as the precision, recall, and accuracy are very high.
+The above confusion matrix tells us the counts for how many true positives, false positives, true negatives, and false negatives our model predicted. The high number of false positives (182,151) suggests that the model is biased towards recommending games. This might be because of the assumption of independence among features. Moreover, the number of false negatives (21,538) suggests that some good recommendations were missed. However, the dominant true positive count (891,411) shows that the model is still effective at making correct recommendations most of the time. According to the confusion matrix, our model has a precision rate of 83.03%, and a recall of 97.64%. This shows that our model is good at recommending games, as the precision, recall, and accuracy are very high.
 
 #### Fitting Graph
 
 ![image](https://github.com/user-attachments/assets/56c342dd-50de-4609-aff5-14b7bb2ddf5d)
 
-We also created a fitting graph for our model to test whether it was overfititng or underfitting to our data. From our fitting graph, we can see that the testing and training accuracies are very close to each other no amtter the number of training samples. Since the accuracoes are almost identical, this means that our model does not have signs of overfitting or underfitting and generalizes well to our data. These results make sense given the nature of a naive bayes model. Since the model assumes conditional independance for all features given the class label, this simplifies the model and reduces the risk of overfitting as it doesn't learn any complex relationships. The probabalistic process of this mdoel also makes it more robust to noise as it's learning the likelihood of the data instead of specific patterns. 
+We also created a fitting graph for our model to test whether it was overfititng or underfitting to our data. From our fitting graph, we can see that the testing and training accuracies are very close to each other no amtter the number of training samples. Since the accuracies are almost identical, this means that our model does not have signs of overfitting or underfitting and generalizes well to our data. These results make sense given the nature of a naive bayes model. Since the model assumes conditional independance for all features given the class label, this simplifies the model and reduces the risk of overfitting as it doesn't learn any complex relationships. The probabalistic process of this mdoel also makes it more robust to noise as it's learning the likelihood of the data instead of specific patterns. 
 
 ### Be sure to interpret your results! If you obtain a poor performance, compare it to some baseline easy task (i.e. random guessing, etc.) so you can have an estimate as to where your model performance is at. Propose various points of improvement for your model, and be thorough! Do not just say "we could use more data", or "I'll be sure to use reinforcement learning for the next milestone so we can better model our objective." Carefully work through your data preprocessing, your training steps, and point out any simplifications that may have impacted model performance, or perhaps any potential errors or biases in the dataset. You are not required to implement these points of improvement unless it is clear that your original model is significantly lacking in detail or effort.
 
 Interpretation of Results:
 
-Our Gaussian Naive Bayes (GNB) model achieved an accuracy of 0.7875, meaning it correctly classified approximately 79% of user recommendations based on the available features.
+Our Categorical Naive Bayes model achieved an accuracy of 0.8182, meaning it correctly classified approximately 82% of user recommendations based on the available features.
 
 Points of Improvement:
 
@@ -456,9 +455,8 @@ Points of Improvement:
 - Feature engineering: We could create new features that show the interaction of features, such as the ratio of playtime to price to see if the game is a good deal.
 - Data Preprocessing: Currently in the data preprocessing, we drop all rows that contain NaN values as we had a lot of data making it feasible. In the future, instead of just dropping them all, we can think about ways to impute values that are missing based on similar games.
 - Handling Outliers: Gaussian Naive Bayes assumes normally distributed features, but real-world data often contains skewness and outliers. Applying log transformations or scaling methods like standardization could improve the distribution of features and improve performance.
-- Smoothing: If some games have very few recommendations, their estimated probabilities could be unreliable. We could implement Laplace smoothing to prevent probabilities from collapsing to zero
-- Hybrid model: Right now, we are using a Gaussian Naive Bayes because we have a continuous variable (review ratio) in our feature set. To improve performance, we can implement a hybrid naive bayes model that combines both Gaussian Naive Bayes for continuous variables and Categorical Naive Bayes for categorical variables. This may work better for the encoded categorical variables like genre, price tier, and playtime tier where the we can calculate the probabilities using using MLE rather than assuming a Gaussian distribution. By combining the two, we may get a more accurate classification.
+
 
 ## Citations:
 
-We used ChatGPT to help us understand Gaussian Naive Bayes and how to implement it with our dataset.
+We used ChatGPT to help us understand Categorical Naive Bayes and how to implement it with our dataset.

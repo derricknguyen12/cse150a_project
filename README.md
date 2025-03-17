@@ -23,7 +23,8 @@ For our project, we used 2 datasets. One includes many steam games along with di
 -  price_tier: Games can be classified into different prices ranges ('Free', 'Budget', 'Mid', 'Premium', 'Deluxe'). This allows our model to identify whether users prefer premium or affordable games. This feature helps get more accurate recommendations based on affordability preferences.
 -  playtime_tier: Playtime tier categorizes the total hours spent on a game into different ranges ('Very Low', 'Low', 'Medium', 'High', 'Very High'). Users who play long-playtime games may prefer similar recommendations, whereas casual players may prefer shorter games. This helps our model capture general player behavior trends.
 
-![bayes_net](https://github.com/user-attachments/assets/0808ef3e-0626-47df-a597-69eca1403c5a)
+![bayes_net](https://github.com/user-attachments/assets/ea6c4565-068f-4d95-867f-1b86a50b24f3)
+
 
 
 ### Describe in detail how your variables interact with each other, and if your model fits a particular structure, explain why you chose that structure to model your agent. If it does not, further elaborate on why you chose that model based on the variables.
@@ -431,7 +432,8 @@ We evaluated the model using accuracy. Predictions were generated on the test se
 ## Conclusion/Results
 
 ### Describe in detail your results, including any helpful visualizations like heatmaps, confusion matrices, etc. (if applicable). Please provide numerical results (unless your model's performance metrics do not include numbers).
-![confusion_matrix](https://github.com/user-attachments/assets/d8a1100c-8d30-4f3c-979f-f59b67accb7d)
+![confusion_matrix](https://github.com/user-attachments/assets/b0cf396d-2423-406f-99f8-d7307a88ad1c)
+
 
 To test the accuracy of our model, we split the data into X, which contained all of our features, and y, which contained the is_recommended column. We then use the train test split to split it into training and testing data. We then used the accuracy_score function from the sklearn metrics library to get our accuracy. This works because our is_recommended column tells us games that the user has previously played and either recommends or not, so we test the model to see if it can correctly guess these past games as a game the user would play or not. Our model scores an accuracy of 81.82%. 
 
@@ -439,7 +441,8 @@ The above confusion matrix tells us the counts for how many true positives, fals
 
 #### Fitting Graph
 
-![image](https://github.com/user-attachments/assets/56c342dd-50de-4609-aff5-14b7bb2ddf5d)
+![fitting_graph](https://github.com/user-attachments/assets/e97c55c3-8d2e-4d0e-95fd-6e3fee553787)
+
 
 We also created a fitting graph for our model to test whether it was overfititng or underfitting to our data. From our fitting graph, we can see that the testing and training accuracies are very close to each other no amtter the number of training samples. Since the accuracies are almost identical, this means that our model does not have signs of overfitting or underfitting and generalizes well to our data. These results make sense given the nature of a naive bayes model. Since the model assumes conditional independance for all features given the class label, this simplifies the model and reduces the risk of overfitting as it doesn't learn any complex relationships. The probabalistic process of this mdoel also makes it more robust to noise as it's learning the likelihood of the data instead of specific patterns. 
 

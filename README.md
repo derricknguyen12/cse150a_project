@@ -330,7 +330,6 @@ After calculating these parameters, we used Bayes' Theorem to determine the post
  ### What is Categorical Naive Bayes?
 Categorical Naive Bayes differ from regular naive bayes in the way that it handles the model's feature distributions. While other forms of naive bayes assumes features follow specific probability distributions such as the multinomial distribution for text data or the Gaussian distribution for continuous data, categorical naive bayes is specifically designed for discrete categorical features. This works well with our data because we binned all of our numerical variables, making them categorical variables. We also have categorical features such as genre which is appropriate for this model. Categorical Naive Bayes estimates the conditional probability of each feature given a class using frequency counts and applies Laplace smoothing to handle unseen category values. 
 
-Categorical Naive Bayes Reference: [https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html ](https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html)
 
  ### How do its training algorithms work?
  
@@ -456,5 +455,6 @@ Points of Improvement:
 
 
 ## Citations:
+Categorical Naive Bayes Reference: [https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html ](https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html)
 
-We used ChatGPT to help us understand Categorical Naive Bayes and how to implement it with our dataset.
+We used ChatGPT to help us better understand Categorical Naive Bayes and it's implementation with our dataset.

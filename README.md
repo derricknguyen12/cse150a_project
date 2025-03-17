@@ -349,6 +349,28 @@ The model iterates over these steps during training, learning the parameters μ 
 ### Be sure to link to a clean, documented portion of code in your notebook or provide a code snippet in the README.
 
 Our preprocessing, data exploration, and training can be found in this notebook (Agent #2): [View the Notebook](proj.ipynb)
+```
+processed_df = preprocess_data(merged_df)
+
+# Model Features
+features = ['review_ratio'] + \
+           [col for col in processed_df.columns if col.startswith('genre_')]
+
+for col in ['price_tier', 'playtime_tier']:
+    le = LabelEncoder()
+    processed_df[col] = le.fit_transform(processed_df[col])
+    features.append(col)
+
+X = processed_df[features]
+y = processed_df['is_recommended']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Naive Bayes model
+nb_model = GaussianNB()
+nb_model.fit(X_train, y_train)
+```
+
 
 ### How did you train your Gaussian Naive Bayes?
  

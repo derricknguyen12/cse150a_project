@@ -1,4 +1,4 @@
-# CSE150A_Project: Game Recommendation System
+# Steam Game Recommendation System
 ### By: Derrick Nguyen, Amelia Lei, Jahnavi Naik
 
 ## PEAS/Agent Analysis:

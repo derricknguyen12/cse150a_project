@@ -3,7 +3,7 @@
 
 ## PEAS/Agent Analysis:
 
-### Describe your agent in terms of PEAS and give a background of your task at hand.
+### Overview
 
 Our AI agent is a game recommendation agent that aims to recommend a game to the user based on their preferences and recommendations of other games they have played in the past. In terms of PEAS, we have:
 
@@ -15,8 +15,6 @@ Our AI agent is a game recommendation agent that aims to recommend a game to the
 
 ## Agent Setup, Data Preprocessing, Training setup
 
-### Give an exploration of your dataset, and highlight which variables are important. Give a brief overview of each variable and its role in your agent/model.
-
 For our project, we used 2 datasets. One includes many steam games along with different attributes that describe them such as price, genre, release date, required age, about the game, etc. We also have a dataframe that has user information, which tells us games that different users have played, if they recommend them, and their reviews. After pre-processing these dataframes, we found that the important variables we would use are review tier, genres, price tier, and playtime tier. These are variables that we engineered using the available features. 
 - review_tier: Review tier represents the proportion of positive reviews a game has received classified into different ranges ('Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive'). It helps us determine the overall sentiment of the game. 
 -  genres: Each game is encoded into multiple genre categories (e.g., Action, RPG, Strategy). This allows the model to identify which genres a user frequently engages with and recommend games within those preferred genres. We used binary encoding, where each genre is represented as a separate feature (genre_action, genre_rpg)
@@ -27,7 +25,7 @@ For our project, we used 2 datasets. One includes many steam games along with di
 
 
 
-### Describe in detail how your variables interact with each other, and if your model fits a particular structure, explain why you chose that structure to model your agent. If it does not, further elaborate on why you chose that model based on the variables.
+### Features Interaction
 
 Here is how each of the features interact with the target variable (is_recommended) and with each other:
 - review_tier:
@@ -52,7 +50,7 @@ P(is_recommended | X) = P(genre | is_recommended) P(price_tier | is_recommended)
 Therefore, even if price_tier and review_tier influence each other, the model treats them separately. This simplifies the model and makes it more efficient. However, one drawback is that it might miss more complex dependencies such as expensive games having lower review scores. 
 
 
-### Describe your process for calculating parameters in your model. That is, if you wish to find the CPTs, provide formulas as to how you computed them. If you used algorithms in class, just mention them.
+### CPTs
 
 Since we made our variables (price_tier, playtime_tier, review_tier, genre) discrete variables by binning them, we used Maximum Likelihood Estimation (MLE) to compute the probability of each category occurring given the recommendation status. This was done by counting the occurrences of each feature value within each class and dividing it by the total number of instances in that class. 
 <div>
@@ -322,11 +320,6 @@ P(is_recommended = False) = Number of Not Recommended Games / Total Number of Ga
 After calculating these parameters, we used Bayes' Theorem to determine the posterior probability of a game being recommended given its feature values.
 
 
-
-### Important: if you used a library like pgmpy, etc., be sure to explain what it does. Then, cite your source (library homepage link or documentation is sufficient) at the bottom of your README.md file. If you use a particular algorithm/model/structure not covered in this class as your core structure (i.e. GaussianHMM, etc.) you must carefully explain the formulation behind this structure. How does it differ from its discrete analog (if it has one?) How do you perform inference on it?
-
-### If you use a particular algorithm/model/structure not covered in this class as a non-core structure (i.e. RandomHillCimb to create BN dependencies) you may briefly explain what the function does. Remember to provide a source.
-
  ### What is Categorical Naive Bayes?
 Categorical Naive Bayes differ from regular naive bayes in the way that it handles the model's feature distributions. While other forms of naive bayes assumes features follow specific probability distributions such as the multinomial distribution for text data or the Gaussian distribution for continuous data, categorical naive bayes is specifically designed for discrete categorical features. This works well with our data because we binned all of our numerical variables, making them categorical variables. We also have categorical features such as genre which is appropriate for this model. Categorical Naive Bayes estimates the conditional probability of each feature given a class using frequency counts and applies Laplace smoothing to handle unseen category values. 
 
@@ -342,9 +335,7 @@ Training a Categorical Naive Bayes classifier involves the following steps:
  
 The model iterates over these steps during training, learning the probability distributions for each feature class combination and using them to classify new data points.
 
-## Train Your Model
-
-### Be sure to link to a clean, documented portion of code in your notebook or provide a code snippet in the README.
+## Train Model
 
 A more detailed version of our preprocessing, data exploration, and training can be found in this notebook (Agent #2): [View the Notebook](proj.ipynb)
 
@@ -407,7 +398,7 @@ nb_model.fit(X_train, y_train)
 ```
 
 
-### How did you train your Categorical Naive Bayes?
+### Categorical Naive Bayes
  
 We trained our Categorical Naive Bayes model by analyzing the dataset and converting the continuous and numerical variables into discrete categories to be used in our model. For our training we:
  
@@ -426,7 +417,6 @@ We evaluated the model using accuracy. Predictions were generated on the test se
 
 ## Conclusion/Results
 
-### Describe in detail your results, including any helpful visualizations like heatmaps, confusion matrices, etc. (if applicable). Please provide numerical results (unless your model's performance metrics do not include numbers).
 ![confusion_matrix](https://github.com/user-attachments/assets/b0cf396d-2423-406f-99f8-d7307a88ad1c)
 
 
@@ -441,9 +431,7 @@ The above confusion matrix tells us the counts for how many true positives, fals
 
 We also created a fitting graph for our model to test whether it was overfititng or underfitting to our data. From our fitting graph, we can see that the testing and training accuracies are very close to each other no matter the number of training samples. Since the accuracies are almost identical, this means that our model does not have signs of overfitting or underfitting and generalizes well to our data. These results make sense given the nature of a naive bayes model. Since the model assumes conditional independance for all features given the class label, this simplifies the model and reduces the risk of overfitting as it doesn't learn any complex relationships. The probabalistic process of this model also makes it more robust to noise as it's learning the likelihood of the data instead of specific patterns. 
 
-### Be sure to interpret your results! If you obtain a poor performance, compare it to some baseline easy task (i.e. random guessing, etc.) so you can have an estimate as to where your model performance is at. Propose various points of improvement for your model, and be thorough! Do not just say "we could use more data", or "I'll be sure to use reinforcement learning for the next milestone so we can better model our objective." Carefully work through your data preprocessing, your training steps, and point out any simplifications that may have impacted model performance, or perhaps any potential errors or biases in the dataset. You are not required to implement these points of improvement unless it is clear that your original model is significantly lacking in detail or effort.
-
-Interpretation of Results:
+### Interpretation of Results:
 
 Our Categorical Naive Bayes model achieved an accuracy of 0.8182, meaning it correctly classified approximately 82% of user recommendations based on the available features.
 
@@ -460,6 +448,3 @@ Categorical Naive Bayes Reference: [https://scikit-learn.org/stable/modules/gene
 
 We used ChatGPT to help us better understand Categorical Naive Bayes and it's implementation with our dataset.
 "How does categoricalNB compare to normal naiveBayes"
-https://chatgpt.com/share/67d7c6ba-a308-800c-b485-af92faceb38b
-
-
